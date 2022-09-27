@@ -4,13 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import Navigation from "./Navigation";
 
 const App = () => {
-  const [data, setData] = useState([
-    {
-      fullname: "",
-      email: "",
-      password: "",
-    },
-  ]);
+  const [data, setData] = useState({
+    fullname: "",
+    email: "",
+    password: "",
+  });
   const [condition, setCondition] = useState(false);
   const onFinish = (values) => {
     console.log("Success:", values);
@@ -35,21 +33,19 @@ const App = () => {
   const Submit = () => {
     if (condition === true) {
       if (data.email.length > 10) {
-        if(data.password.length >0){
-          localStorage.setItem("items", JSON.stringify(data));
+        if (data.password.length > 0) {
+          localStorage.setItem("items", JSON.stringify([data]));
           navigate("/signupsuccess");
+          // console.log("oldData :>> ", oldData);
+          // setData((oldData) => [...oldData, data]);
+          // localStorage.setItem("items", JSON.stringify(data));
         }
+        let oldData = JSON.parse(localStorage.getItem("items"));
+        localStorage.setItem("items", JSON.stringify([...oldData, data]));
       }
     }
-    const oldData = JSON.parse(localStorage.getItem("items"));
-    console.log("oldData :>> ", oldData);
-    localStorage.setItem("items", JSON.stringify([...oldData, data]));
-    // }
     // setData((current) => [...current, data]);
-
-    // useEffect(() => {
-    //   Submit();
-    // }, [data]);
+    // console.log("oldData :>> ", oldData);
   };
   return (
     <>
