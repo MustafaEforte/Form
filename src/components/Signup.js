@@ -35,11 +35,15 @@ const App = () => {
   const Submit = () => {
     if (condition === true) {
       if (data.email.length > 10) {
-        localStorage.setItem("items", JSON.stringify(data));
-        navigate("/signupsuccess");
+        if(data.password.length >0){
+          localStorage.setItem("items", JSON.stringify(data));
+          navigate("/signupsuccess");
+        }
       }
     }
-
+    const oldData = JSON.parse(localStorage.getItem("items"));
+    console.log("oldData :>> ", oldData);
+    localStorage.setItem("items", JSON.stringify([...oldData, data]));
     // }
     // setData((current) => [...current, data]);
 
