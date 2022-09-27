@@ -1,14 +1,17 @@
 import { Button, Checkbox, Form, Input, Typography } from "antd";
 import React, { useEffect, useState } from "react";
-import { json, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navigation from "./Navigation";
 
 const App = () => {
-  const [data, setData] = useState({
-    fullname: "",
-    email: "",
-    password: "",
-  });
+  const [data, setData] = useState([
+    {
+      fullname: "",
+      email: "",
+      password: "",
+    },
+  ]);
+  const [condition, setCondition] = useState(false);
   const onFinish = (values) => {
     console.log("Success:", values);
   };
@@ -16,6 +19,7 @@ const App = () => {
   const { Title } = Typography;
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+    return false;
   };
 
   const handleChange = (e) => {
@@ -23,21 +27,26 @@ const App = () => {
       ...data,
       [e.target.name]: e.target.value,
     });
+    setCondition(true);
     console.log("data :>> ", data);
   };
+
   const navigate = useNavigate();
-  const Submit = (e) => {
-    localStorage.setItem("items", JSON.stringify(data));
-    // if (e.target.rules.required === true) {
-    navigate("/signupsuccess");
+  const Submit = () => {
+    if (condition === true) {
+      if (data.email.length > 10) {
+        localStorage.setItem("items", JSON.stringify(data));
+        navigate("/signupsuccess");
+      }
+    }
+
     // }
     // setData((current) => [...current, data]);
+
+    // useEffect(() => {
+    //   Submit();
+    // }, [data]);
   };
-
-  // useEffect(() => {
-  //   Submit();
-  // }, [data]);
-
   return (
     <>
       {" "}
@@ -103,7 +112,7 @@ const App = () => {
                 },
               ]}
             >
-              <Input onChange={handleChange} name="email" />
+              <Input onChange={handleChange} name="email" type="email" />
             </Form.Item>
 
             <Form.Item
@@ -116,7 +125,11 @@ const App = () => {
                 },
               ]}
             >
-              <Input.Password onChange={handleChange} name="password" />
+              <Input.Password
+                onChange={handleChange}
+                name="password"
+                type="password"
+              />
             </Form.Item>
 
             <Form.Item
