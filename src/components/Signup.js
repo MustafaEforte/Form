@@ -36,12 +36,14 @@ const App = () => {
         if (data.password.length > 0) {
           localStorage.setItem("items", JSON.stringify([data]));
           navigate("/signupsuccess");
+          let oldData = JSON.parse(localStorage.getItem("items"));
+          if (data.email !== oldData.email) {
+            localStorage.setItem("items", JSON.stringify([...oldData, data]));
+          }
           // console.log("oldData :>> ", oldData);
           // setData((oldData) => [...oldData, data]);
           // localStorage.setItem("items", JSON.stringify(data));
         }
-        let oldData = JSON.parse(localStorage.getItem("items"));
-        localStorage.setItem("items", JSON.stringify([...oldData, data]));
       }
     }
     // setData((current) => [...current, data]);
